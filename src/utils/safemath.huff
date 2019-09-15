@@ -1,17 +1,11 @@
 template <safemath_revert_label>
-#define macro SM_ADD {    // [ a, b ]
+#define macro SM_ADD = takes(2) returns(1) {
+  // [ a, b ]
   dup2                    // [ b, a, b ]
   add                     // [ b+a, b ]
   dup1                    // [ b+a, b+a, b ]
   swap2                   // [ b, b+a, b+a ]
   gt                      // [ b>(b+a), (b+a) ]
   <safemath_revert_label> // [ revert_label, b>(b+a), (b+a) ]
-  jumpi }                 // [ b>(b+a), (b+a) ]
-
-template <safemath_revert_label>
-#define macro SM_SUB = takes(2) returns(1) {
-  // [a, b]
-  dup1 dup3 gt // [b>a, a, b]
-  <safemath_revert_label> jumpi
-  sub
+  jumpi                   // [ b>(b+a), (b+a) ]
 }

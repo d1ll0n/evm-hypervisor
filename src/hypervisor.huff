@@ -3,8 +3,9 @@
 #include "./utils/integers.huff"
 #include "./utils/safemath.huff"
 
-#include "./guest-adapters.huff"
+#include "./guest-adapters/header.huff"
 #include "./setup.huff"
+#include "./memio/io.huff"
 #include "./vm.huff"
 
 /* FUNCTIONS */

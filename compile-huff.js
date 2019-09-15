@@ -10,11 +10,12 @@ const makeConstructor = require('emasm/macros/make-constructor');
 const addHexPrefix = (s) => s.substr(0, 2) === '0x' ? s : '0x' + s;
 
 function compile() {
-	const { inputMap, macros, jumptables } = parser.parseFile('evmvm.huff', path.join(__dirname, 'huff_modules'));
+	const { inputMap, macros, jumptables } = parser.parseFile('hypervisor.huff', path.join(__dirname, 'src'));
 	const {
 		data: { bytecode, sourcemap }
-	} = parser.processMacro('EVMVM_MAIN', 0, [], macros, inputMap, jumptables);
+	} = parser.processMacro('INITIALIZE_HYPERVISOR', 0, [], macros, inputMap, jumptables);
+	console.log(bytecode.length)
 	return emasm(makeConstructor([ 'bytes:intermediate', [ addHexPrefix(bytecode) ]]));
 }
-
+compile()
 module.exports = compile;

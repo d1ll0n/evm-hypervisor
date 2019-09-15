@@ -1,5 +1,5 @@
-template <loc>
-#define macro LOAD { <loc> mload }
+template <ptr>
+#define macro LOAD = takes(1) returns(1) { <ptr> mload }
 
-template <loc>
-#define macro STORE { <loc> mstore }
+template <ptr>
+#define macro STORE = takes(1) returns(0) { <ptr> mstore }

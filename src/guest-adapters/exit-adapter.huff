@@ -1,5 +1,13 @@
-#define macro GUEST_REVERT { OFFSET_MEM() revert }
+#define macro GUEST_REVERT {
+  OFFSET_MEM()
+  revert
+}
 
-#define macro GUEST_RETURN { OFFSET_MEM() return }
+#define macro GUEST_RETURN {
+  OFFSET_MEM()
+  return
+}
 
-#define macro GUEST_STOP { stop }
+#define macro GUEST_STOP {
+  stop
+}
