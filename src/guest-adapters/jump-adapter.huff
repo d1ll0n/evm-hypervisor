@@ -1,0 +1,23 @@
+template <execute_jump_label>
+#define macro GUEST_JUMP {
+  dup1
+  EXTCODE_LOC()
+  add
+  mload
+  0xf8
+  shr
+  0x5b
+  eq
+  execute_jump_label
+  jumpi
+  0x0
+  jump
+}
+
+template <op_jump_label>
+#define macro GUEST_JUMPI {
+  swap1
+  op_jump_label
+  jumpi
+  pop
+}

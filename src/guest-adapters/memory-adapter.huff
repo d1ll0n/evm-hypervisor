@@ -1,0 +1,28 @@
+template <safemath_error_label>
+#define macro GUEST_MLOAD {
+  CALC_MEM_OFFSET<safemath_error_label>() mload
+}
+
+template <safemath_error_label>
+#define macro GUEST_MSTORE {
+  CALC_MEM_OFFSET<safemath_error_label>() mstore
+}
+
+template <safemath_error_label>
+#define macro GUEST_MSTORE8 {
+  CALC_MEM_OFFSET<safemath_error_label>() mstore8
+}
+
+#define macro GUEST_MSIZE {
+  GET_MEM_OFFSET() msize sub
+}
+
+template <safemath_error_label>
+#define macro GUEST_SHA3 {
+  CALC_MEM_OFFSET<safemath_error_label>() sha3
+}
+
+template <safemath_error_label>
+#define macro GUEST_RETURNDATACOPY {
+  CALC_MEM_OFFSET<safemath_error_label>() returndatacopy
+}

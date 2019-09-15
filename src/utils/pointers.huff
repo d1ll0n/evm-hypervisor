@@ -1,0 +1,5 @@
+template <loc>
+#define macro LOAD { <loc> mload }
+
+template <loc>
+#define macro STORE { <loc> mstore }

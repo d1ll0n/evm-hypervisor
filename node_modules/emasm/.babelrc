@@ -1,0 +1,12 @@
+{
+  "presets": [
+    ["@babel/env", {
+      "targets": {
+        "browsers": "last 2 Chrome versions",
+        "node": "current"
+      },
+      "modules": ["umd"]
+    }]
+  ],
+  "plugins": ["@babel/plugin-transform-modules-umd", "@babel/plugin-transform-modules-commonjs"]
+}

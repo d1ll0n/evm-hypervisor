@@ -1,0 +1,26 @@
+
+template <mask, bytesize, look_behind_size>
+#define macro READ_PUSH = takes(0) returns(1) {
+  /*
+    masking the code we load from memory will decrease the number of necessary operations for reading pushes
+    first we need to look backwards in the code so that the push bytes we are copying are at the end of the byte string
+    then we remove the sections of code we don't care about
+    pc still refers to the location of the push instruction, so look behind size will be 31-size
+  */ 
+  <look_behind_size>
+  PC_GET() dup1            // [pc, pc, look_behind_size]
+  /* Increment the program counter for the next opcode */
+  <bytesize> add SET_PC() sub  // [ pc - look_behind_size ]
+  /* read the next 32 bytes of code */
+  READ_BYTECODE_WORD()                  // [ code[lbpc:lbpc+32] ]
+  /* mask the unneeded section */
+  <mask> and                            // [ pushBytes ]
+}
+
+#define macro READ_PUSH32 = takes(0) returns(1) {
+  /* pc still refers to the location of the push instruction, increment it by 1 */
+  PC_GET() 0x01 add // [ pc ]
+  /* Increment the program counter for the next opcode */
+  dup1 0x20 add SET_PC()  // [ pc ]
+  mload // mem[2081+pc], pc
+}

@@ -1,0 +1,29 @@
+template <safemath_error_label>
+#define macro GUEST_LOG0 {
+  CALC_MEM_OFFSET<safemath_error_label>()
+  log0
+}
+
+template <safemath_error_label>
+#define macro GUEST_LOG1 {
+  CALC_MEM_OFFSET<safemath_error_label>()
+  log1
+}
+
+template <safemath_error_label>
+#define macro GUEST_LOG2 {
+  CALC_MEM_OFFSET<safemath_error_label>()
+  log2
+}
+
+template <safemath_error_label>
+#define macro GUEST_LOG3 {
+  CALC_MEM_OFFSET<safemath_error_label>()
+  log3
+}
+
+template <safemath_error_label>
+#define macro GUEST_LOG4 {
+  CALC_MEM_OFFSET<safemath_error_label>()
+  log4
+}

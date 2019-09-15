@@ -1,0 +1,31 @@
+op_calldataload:
+op_calldatasize: 
+op_calldatacopy: 
+
+#define macro GUEST_CALLDATALOAD {
+  0x20
+  dup1
+  calldataload        // [ calldata_ptr, 0x20, ptr ]
+  0x20
+  add                 // [ calldata_ptr+32, ptr ]
+  add calldataload    // [ calldata_ptr+32, ptr ]
+}
+
+#define macro GUEST_CALLDATASIZE {
+  0x20
+  calldataload
+  calldataload
+}
+
+template <safemath_error_label>
+#define macro GUEST_CALLDATACOPY {
+  CALC_MEM_OFFSET<safemath_error_label>()
+  swap1
+  0x20
+  calldataload
+  0x20
+  add
+  add
+  swap1
+  calldatacopy
+}

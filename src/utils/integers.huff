@@ -1,0 +1,34 @@
+/**
+  * @dev +=
+  * @param intLocation location of integer in memory
+  */
+template <intLocation>
+#define macro INT_PLUS_EQ = takes(1) returns(0) {
+  <intLocation> mload add
+  <intLocation> mstore
+}
+
+/**
+  * @dev int++
+  * @param intLocation location of integer in memory
+  */
+template <intLocation>
+#define macro INT_PLUS_PLUS = takes(0) returns(1) {
+  <intLocation>
+  mload
+  dup1 // [int, int]
+  0x01 add // [int+1, int]
+  <intLocation>
+  mstore
+}
+
+/**
+  * @dev ++int
+  * @param intLocation location of integer in memory
+  */
+template <intLocation>
+#define macro PLUS_PLUS_INT = takes(0) returns(1) {
+  <intLocation> dup1 mload  // [int, int_loc]
+  0x01 add dup1             // [int+1, int+1, int_loc]
+  mstore
+}

@@ -1,0 +1,32 @@
+#include "./pointers.huff"
+#include ""
+
+/* program counter */
+#define macro GET_PC              { LOAD<PC_PTR>() }
+#define macro SET_PC              { STORE<PC_PTR>() }
+
+/* codesize */
+#define macro GET_CODESIZE        { LOAD<CODESIZE_PTR>() }
+#define macro SET_CODESIZE        { STORE<CODESIZE_PTR>() }
+
+#define macro GET_CODE_PTR        { LOAD<CODE_PTR>() }
+#define macro CALC_CODE_OFFSET    { GET_CODE_PTR() add }
+#define macro GET_CODE            { CALC_CODE_OFFSET() mload }
+
+#define macro GET_GUEST_ADDRESS   { LOAD<GUEST_ADDRESS_PTR>() }
+#define macro SET_GUEST_ADDRESS   { STORE<GUEST_ADDRESS_PTR>() }
+
+#define macro GET_MEM_OFFSET      { LOAD<MEM_OFFSET_PTR>() }
+#define macro SET_MEM_OFFSET      { STORE<MEM_OFFSET_PTR>() }
+
+template <safemath_error_label>
+#define macro CALC_MEM_OFFSET = takes(1) returns(1) {
+  GET_MEM_OFFSET()
+  SM_ADD<safemath_error_label>()
+  }
+
+template <safemath_error_label>
+#define macro GET_GUEST_MEM {
+  CALC_MEM_OFFSET<safemath_error_label>()
+  mload
+}

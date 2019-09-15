@@ -1,0 +1,18 @@
+#define macro GUEST_CODESIZE {
+  GET_CODESIZE()
+}
+
+template <safemath_error_label>
+#define macro GUEST_CODECOPY {
+  CALC_MEM_OFFSET<safemath_error_label>()
+  GET_GUEST_ADDRESS()
+  extcodecopy
+}
+
+template <safemath_error_label>
+#define macro GUEST_EXTCODECOPY {
+  swap1
+  CALC_MEM_OFFSET<safemath_error_label>()
+  swap1
+  extcodecopy
+}

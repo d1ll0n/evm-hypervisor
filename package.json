@@ -1,0 +1,19 @@
+{
+  "name": "huff-hypervisor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "compile-huff.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aztec/huff": "^0.0.1",
+    "emasm": "^0.1.7"
+  }
+}

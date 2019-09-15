@@ -1,0 +1,21 @@
+#define macro GUEST_PC {
+  GET_PC()
+  // set pc [pc_loc, pc]
+  GET_CODE_PTR()
+  dup2
+  sub
+  swap1
+  0x1
+  add
+  SET_PC()
+}
+
+#define macro GUEST_ADDRESS {
+  GET_GUEST_ADDRESS()
+}
+
+#define macro GUEST_MSIZE {
+  GET_MEM_OFFSET()
+  msize
+  sub
+}

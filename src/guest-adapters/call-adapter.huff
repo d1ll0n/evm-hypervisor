@@ -1,0 +1,63 @@
+
+template <safemath_error_label>
+#define macro GUEST_CALL = takes(7) returns(1) {
+  swap3
+  CALC_MEM_OFFSET<safemath_error_label>()
+  swap3
+  swap5
+  CALC_MEM_OFFSET<safemath_error_label>()
+  swap5
+  INCREMENT_AND_RUN()
+}
+
+template <safemath_error_label>
+#define macro GUEST_CALLCODE = takes(7) returns(1) {
+  swap3
+  CALC_MEM_OFFSET<safemath_error_label>()
+  swap3
+  swap5
+  CALC_MEM_OFFSET<safemath_error_label>()
+  swap5
+  INCREMENT_AND_RUN()
+}
+
+template <safemath_error_label>
+#define macro GUEST_STATICCALL = takes(7) returns(1) {
+  swap2
+  CALC_MEM_OFFSET<safemath_error_label>()
+  swap2
+  swap4
+  CALC_MEM_OFFSET<safemath_error_label>()
+  swap4
+  INCREMENT_AND_RUN()
+}
+
+template <safemath_error_label>
+#define macro GUEST_DELEGATECALL = takes(7) returns(1) {
+  swap2
+  CALC_MEM_OFFSET<safemath_error_label>()
+  swap2
+  swap4
+  CALC_MEM_OFFSET<safemath_error_label>()
+  swap4
+  INCREMENT_AND_RUN()
+}
+
+template <safemath_error_label>
+#define macro GUEST_CREATE = takes(7) returns(1) {
+  swap1
+  CALC_MEM_OFFSET<safemath_error_label>()
+  swap1
+  create
+  INCREMENT_AND_RUN()
+}
+
+template <safemath_error_label>
+#define macro GUEST_CREATE2 = takes(7) returns(1) {
+  swap2
+  CALC_MEM_OFFSET<safemath_error_label>()
+  swap2
+  create2
+  INCREMENT_AND_RUN()
+}
+

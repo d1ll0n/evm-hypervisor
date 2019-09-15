@@ -1,0 +1,52 @@
+/* VARIABLES */
+#include "./utils/pointers.huff"
+#include "./utils/integers.huff"
+#include "./utils/safemath.huff"
+
+#include "./guest-adapters.huff"
+#include "./setup.huff"
+#include "./vm.huff"
+
+/* FUNCTIONS */
+template <amount>
+#define macro PC_INCREMENT_AND_PUSH = takes(0) returns(1) {
+  PC_GET()
+  <amount>
+  add
+  dup1
+  SET_PC()
+}
+
+/**
+  * @dev read a word from bytecode
+  */
+#define macro READ_BYTECODE_WORD {
+  mload
+}
+
+#define macro READ_OPCODE {
+  mload
+  0xf8
+  shr
+}
+
+#define macro RUN_NEXT_INSTRUCTION {
+  READ_OPCODE()
+  0x20
+  mul
+  mload
+  jump
+}
+
+#define macro INCREMENT_AND_RUN {
+  PLUS_PLUS_INT<PC_PTR>()
+  RUN_NEXT_INSTRUCTION()
+}
+
+#define macro INITIALIZE_HYPERVISOR = takes(0) returns(0) {
+  safemath_error: 0x00 0x00 revert
+  execute_jump: EXECUTE_JUMP()
+  PREPARE_HYPERVISOR()
+  0x0 RUN_NEXT_INSTRUCTION()
+  VM__MAIN<safemath_error, execute_jump>()
+}

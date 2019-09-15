@@ -1,0 +1,5 @@
+#define macro PC_PTR { 0x2000 }
+#define macro EXTCODESIZE_PTR     { 0x2020 }
+#define macro GUEST_ADDRESS_PTR   { 0x2040 }
+#define macro MEM_OFFSET_PTR      { 0x2060 }
+#define macro CODE_PTR            { 0x2080 }
