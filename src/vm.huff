@@ -1,12 +1,7 @@
-#define macro EXECUTE_JUMP {
-  0x1
-  add
-  dup1
-  SET_PC()
-  RUN_NEXT_INSTRUCTION()
-}
+#include "./utils/integers.huff"
+#include "./guest-adapters/header.huff"
 
-#define macro MATH_OPERATIONS {
+#define macro MATH_OPERATIONS = takes(0) returns(0) {
   op_add:               add INCREMENT_AND_RUN()
   op_mul:               mul INCREMENT_AND_RUN()
   op_sub:               sub INCREMENT_AND_RUN()
@@ -26,7 +21,8 @@
   op_iszero:            iszero INCREMENT_AND_RUN()
 }
 
-#define macro BIT_OPERATIONS {
+template <safemath_error_label>
+#define macro BIT_OPERATIONS = takes(0) returns(0) {
   op_and:               and INCREMENT_AND_RUN()
   op_or:                or INCREMENT_AND_RUN()
   op_xor:               xor INCREMENT_AND_RUN()
@@ -41,19 +37,19 @@
 }
 
 template <safemath_error_label>
-#define macro TX_OPERATIONS {
+#define macro TX_OPERATIONS = takes(0) returns(0) {
   op_origin:            origin INCREMENT_AND_RUN()
   op_caller:            caller INCREMENT_AND_RUN()
   op_callvalue:         callvalue INCREMENT_AND_RUN()
   op_calldataload:        GUEST_CALLDATALOAD() INCREMENT_AND_RUN()
   op_calldatasize:        GUEST_CALLDATASIZE() INCREMENT_AND_RUN()
   op_calldatacopy:        GUEST_CALLDATACOPY<safemath_error_label>() INCREMENT_AND_RUN()
-  op_gasprice:          gasprice INCREMENT_AND_RUN() -- make gas price macro
+  op_gasprice:          gasprice INCREMENT_AND_RUN()
   op_gas:               gas INCREMENT_AND_RUN()
 }
 
 template <safemath_error_label>
-#define macro EXTERNAL_OPERATIONS {
+#define macro EXTERNAL_OPERATIONS = takes(0) returns(0) {
   op_balance:           balance INCREMENT_AND_RUN()
   op_extcodesize:       extcodesize INCREMENT_AND_RUN()
   op_extcodecopy:         GUEST_EXTCODECOPY<safemath_error_label>() INCREMENT_AND_RUN()
@@ -61,36 +57,36 @@ template <safemath_error_label>
   op_returndatacopy:      GUEST_RETURNDATACOPY<safemath_error_label>() INCREMENT_AND_RUN()
   op_create:              GUEST_CREATE<safemath_error_label>() INCREMENT_AND_RUN()
   op_create2:             GUEST_CREATE2<safemath_error_label>() INCREMENT_AND_RUN()
-  op_call:                GUEST_CALL<safemath_error_label>()
-  op_callcode:            GUEST_CALLCODE<safemath_error_label>()
-  op_return:              GUEST_RETURN()
+  op_call:                GUEST_CALL<safemath_error_label>() INCREMENT_AND_RUN()
+  op_callcode:            GUEST_CALLCODE<safemath_error_label>() INCREMENT_AND_RUN()
+  op_return:              GUEST_RETURN<safemath_error_label>()
   op_delegatecall:        GUEST_DELEGATECALL<safemath_error_label>() INCREMENT_AND_RUN()
   op_staticcall:          GUEST_STATICCALL<safemath_error_label>() INCREMENT_AND_RUN()
-  op_revert:              GUEST_REVERT()
-  op_selfdestruct:        GUEST_SELFDESTRUCT()
+  op_revert:              GUEST_REVERT<safemath_error_label>()
+  op_selfdestruct:        revert //GUEST_SELFDESTRUCT()
 }
 
 template <safemath_error_label>
-#define macro CONTEXT_OPERATIONS {
+#define macro CONTEXT_OPERATIONS = takes(0) returns(0) {
   op_address:             GUEST_ADDRESS() INCREMENT_AND_RUN()
-  op_codesize:            GUEST_CODESIZE() INCREMENT_AND_RUN() -- 
+  op_codesize:            GUEST_CODESIZE() INCREMENT_AND_RUN()  
   op_codecopy:            GUEST_CODECOPY<safemath_error_label>() INCREMENT_AND_RUN()
 }
 
 template <safemath_error_label>
-#define macro MEMORY_OPERATIONS {
+#define macro MEMORY_OPERATIONS = takes(0) returns(0) {
   op_mload:               GUEST_MLOAD<safemath_error_label>() INCREMENT_AND_RUN()
   op_mstore:              GUEST_MSTORE<safemath_error_label>() INCREMENT_AND_RUN()
   op_mstore8:             GUEST_MSTORE8<safemath_error_label>() INCREMENT_AND_RUN()
   op_msize:               GUEST_MSIZE() INCREMENT_AND_RUN()
 }
 
-#define macro STORAGE_OPERATIONS {
+#define macro STORAGE_OPERATIONS = takes(0) returns(0) {
   op_sload:             sload INCREMENT_AND_RUN()
   op_sstore:            sstore INCREMENT_AND_RUN()
 }
 
-#define macro BLOCK_OPERATIONS {
+#define macro BLOCK_OPERATIONS = takes(0) returns(0) {
   op_blockhash:         blockhash INCREMENT_AND_RUN()
   op_coinbase:          coinbase INCREMENT_AND_RUN()
   op_timestamp:         timestamp INCREMENT_AND_RUN()
@@ -100,52 +96,52 @@ template <safemath_error_label>
 }
 
 template <execute_jump_label>
-#define macro VM_OPERATIONS {
+#define macro VM_OPERATIONS = takes(0) returns(0) {
   op_invalid:           invalid
   op_stop:              stop
   op_pop:               pop INCREMENT_AND_RUN()
   op_jump:                GUEST_JUMP<execute_jump_label>()
-  op_jumpi:               GUEST_JUMPI<op_jump>() INCREMENT_AND_RUN()
+  op_jumpi:               GUEST_JUMPI<execute_jump_label>() INCREMENT_AND_RUN()
   op_pc:                  GUEST_PC() RUN_NEXT_INSTRUCTION()
   op_jumpdest:          INCREMENT_AND_RUN()
 }
 
-#define macro PUSH_OPERATIONS {
-  op_push1:                   READ_PUSH<PUSH1_MASK, 0x1, 0x1f>() RUN_NEXT_INSTRUCTION()
-  op_push2:                   READ_PUSH<PUSH2_MASK, 0x2, 0x1e>() RUN_NEXT_INSTRUCTION()
-  op_push3:                   READ_PUSH<PUSH3_MASK, 0x3, 0x1d>() RUN_NEXT_INSTRUCTION()
-  op_push4:                   READ_PUSH<PUSH4_MASK, 0x4, 0x1c>() RUN_NEXT_INSTRUCTION()
-  op_push5:                   READ_PUSH<PUSH5_MASK, 0x5, 0x1b>() RUN_NEXT_INSTRUCTION()
-  op_push6:                   READ_PUSH<PUSH6_MASK, 0x6, 0x1a>() RUN_NEXT_INSTRUCTION()
-  op_push7:                   READ_PUSH<PUSH7_MASK, 0x7, 0x19>() RUN_NEXT_INSTRUCTION()
-  op_push8:                   READ_PUSH<PUSH8_MASK, 0x8, 0x18>() RUN_NEXT_INSTRUCTION()
-  op_push9:                   READ_PUSH<PUSH9_MASK, 0x9, 0x17>() RUN_NEXT_INSTRUCTION()
-  op_push10:                  READ_PUSH<PUSH10_MASK, 0xa, 0x16>() RUN_NEXT_INSTRUCTION()
-  op_push11:                  READ_PUSH<PUSH11_MASK, 0xb, 0x15>() RUN_NEXT_INSTRUCTION()
-  op_push12:                  READ_PUSH<PUSH12_MASK, 0xc, 0x14>() RUN_NEXT_INSTRUCTION()
-  op_push13:                  READ_PUSH<PUSH13_MASK, 0xd, 0x13>() RUN_NEXT_INSTRUCTION()
-  op_push14:                  READ_PUSH<PUSH14_MASK, 0xe, 0x12>() RUN_NEXT_INSTRUCTION()
-  op_push15:                  READ_PUSH<PUSH15_MASK, 0xf, 0x11>() RUN_NEXT_INSTRUCTION()
-  op_push16:                  READ_PUSH<PUSH16_MASK, 0x10, 0x10>() RUN_NEXT_INSTRUCTION()
-  op_push17:                  READ_PUSH<PUSH17_MASK, 0x11, 0xf>() RUN_NEXT_INSTRUCTION()
-  op_push18:                  READ_PUSH<PUSH18_MASK, 0x12, 0xe>() RUN_NEXT_INSTRUCTION()
-  op_push19:                  READ_PUSH<PUSH19_MASK, 0x13, 0xd>() RUN_NEXT_INSTRUCTION()
-  op_push20:                  READ_PUSH<PUSH20_MASK, 0x14, 0xc>() RUN_NEXT_INSTRUCTION()
-  op_push21:                  READ_PUSH<PUSH21_MASK, 0x15, 0xb>() RUN_NEXT_INSTRUCTION()
-  op_push22:                  READ_PUSH<PUSH22_MASK, 0x16, 0xa>() RUN_NEXT_INSTRUCTION()
-  op_push23:                  READ_PUSH<PUSH23_MASK, 0x17, 0x9>() RUN_NEXT_INSTRUCTION()
-  op_push24:                  READ_PUSH<PUSH24_MASK, 0x18, 0x8>() RUN_NEXT_INSTRUCTION()
-  op_push25:                  READ_PUSH<PUSH25_MASK, 0x19, 0x7>() RUN_NEXT_INSTRUCTION()
-  op_push26:                  READ_PUSH<PUSH26_MASK, 0x1a, 0x6>() RUN_NEXT_INSTRUCTION()
-  op_push27:                  READ_PUSH<PUSH27_MASK, 0x1b, 0x5>() RUN_NEXT_INSTRUCTION()
-  op_push28:                  READ_PUSH<PUSH28_MASK, 0x1c, 0x4>() RUN_NEXT_INSTRUCTION()
-  op_push29:                  READ_PUSH<PUSH29_MASK, 0x1d, 0x3>() RUN_NEXT_INSTRUCTION()
-  op_push30:                  READ_PUSH<PUSH30_MASK, 0x1e, 0x2>() RUN_NEXT_INSTRUCTION()
-  op_push31:                  READ_PUSH<PUSH31_MASK, 0x1f, 0x1>() RUN_NEXT_INSTRUCTION()
-  op_push32:                  READ_PUSH32() RUN_NEXT_INSTRUCTION()
+#define macro PUSH_OPERATIONS = takes(0) returns(0) {
+  op_push1:                   READ_PUSH<PUSH1_MASK, 0x1, 0x1e>() INCREMENT_AND_RUN()
+  op_push2:                   READ_PUSH<PUSH2_MASK, 0x2, 0x1d>() INCREMENT_AND_RUN()
+  op_push3:                   READ_PUSH<PUSH3_MASK, 0x3, 0x1c>() INCREMENT_AND_RUN()
+  op_push4:                   READ_PUSH<PUSH4_MASK, 0x4, 0x1b>() INCREMENT_AND_RUN()
+  op_push5:                   READ_PUSH<PUSH5_MASK, 0x5, 0x1a>() INCREMENT_AND_RUN()
+  op_push6:                   READ_PUSH<PUSH6_MASK, 0x6, 0x19>() INCREMENT_AND_RUN()
+  op_push7:                   READ_PUSH<PUSH7_MASK, 0x7, 0x18>() INCREMENT_AND_RUN()
+  op_push8:                   READ_PUSH<PUSH8_MASK, 0x8, 0x17>() INCREMENT_AND_RUN()
+  op_push9:                   READ_PUSH<PUSH9_MASK, 0x9, 0x16>() INCREMENT_AND_RUN()
+  op_push10:                  READ_PUSH<PUSH10_MASK, 0xa, 0x15>() INCREMENT_AND_RUN()
+  op_push11:                  READ_PUSH<PUSH11_MASK, 0xb, 0x14>() INCREMENT_AND_RUN()
+  op_push12:                  READ_PUSH<PUSH12_MASK, 0xc, 0x13>() INCREMENT_AND_RUN()
+  op_push13:                  READ_PUSH<PUSH13_MASK, 0xd, 0x12>() INCREMENT_AND_RUN()
+  op_push14:                  READ_PUSH<PUSH14_MASK, 0xe, 0x11>() INCREMENT_AND_RUN()
+  op_push15:                  READ_PUSH<PUSH15_MASK, 0xf, 0x10>() INCREMENT_AND_RUN()
+  op_push16:                  READ_PUSH<PUSH16_MASK, 0x10, 0xf>() INCREMENT_AND_RUN()
+  op_push17:                  READ_PUSH<PUSH17_MASK, 0x11, 0xe>() INCREMENT_AND_RUN()
+  op_push18:                  READ_PUSH<PUSH18_MASK, 0x12, 0xd>() INCREMENT_AND_RUN()
+  op_push19:                  READ_PUSH<PUSH19_MASK, 0x13, 0xc>() INCREMENT_AND_RUN()
+  op_push20:                  READ_PUSH<PUSH20_MASK, 0x14, 0xb>() INCREMENT_AND_RUN()
+  op_push21:                  READ_PUSH<PUSH21_MASK, 0x15, 0xa>() INCREMENT_AND_RUN()
+  op_push22:                  READ_PUSH<PUSH22_MASK, 0x16, 0x9>() INCREMENT_AND_RUN()
+  op_push23:                  READ_PUSH<PUSH23_MASK, 0x17, 0x8>() INCREMENT_AND_RUN()
+  op_push24:                  READ_PUSH<PUSH24_MASK, 0x18, 0x7>() INCREMENT_AND_RUN()
+  op_push25:                  READ_PUSH<PUSH25_MASK, 0x19, 0x6>() INCREMENT_AND_RUN()
+  op_push26:                  READ_PUSH<PUSH26_MASK, 0x1a, 0x5>() INCREMENT_AND_RUN()
+  op_push27:                  READ_PUSH<PUSH27_MASK, 0x1b, 0x4>() INCREMENT_AND_RUN()
+  op_push28:                  READ_PUSH<PUSH28_MASK, 0x1c, 0x3>() INCREMENT_AND_RUN()
+  op_push29:                  READ_PUSH<PUSH29_MASK, 0x1d, 0x2>() INCREMENT_AND_RUN()
+  op_push30:                  READ_PUSH<PUSH30_MASK, 0x1e, 0x1>() INCREMENT_AND_RUN()
+  op_push31:                  READ_PUSH<PUSH31_MASK, 0x1f, 0x0>() INCREMENT_AND_RUN()
+  op_push32:                  READ_PUSH32() INCREMENT_AND_RUN()
 }
 
-#define macro DUP_OPERATIONS {
+#define macro DUP_OPERATIONS = takes(0) returns(0) {
   op_dup1:            dup1 INCREMENT_AND_RUN()
   op_dup2:            dup2 INCREMENT_AND_RUN()
   op_dup3:            dup3 INCREMENT_AND_RUN()
@@ -164,7 +160,7 @@ template <execute_jump_label>
   op_dup16:           dup16 INCREMENT_AND_RUN()
 }
 
-#define macro SWAP_OPERATIONS {
+#define macro SWAP_OPERATIONS = takes(0) returns(0) {
   op_swap1:           swap1 INCREMENT_AND_RUN()
   op_swap2:           swap2 INCREMENT_AND_RUN()
   op_swap3:           swap3 INCREMENT_AND_RUN()
@@ -184,7 +180,7 @@ template <execute_jump_label>
 }
 
 template <safemath_error_label>
-#define macro LOG_OPERATIONS {
+#define macro LOG_OPERATIONS = takes(0) returns(0) {
   op_log0:                    GUEST_LOG0<safemath_error_label>() INCREMENT_AND_RUN()
   op_log1:                    GUEST_LOG1<safemath_error_label>() INCREMENT_AND_RUN()
   op_log2:                    GUEST_LOG2<safemath_error_label>() INCREMENT_AND_RUN()
@@ -195,17 +191,17 @@ template <safemath_error_label>
 
 template <safemath_error_label, execute_jump_label>
 #define macro VM__MAIN = takes(0) returns(0) {
-MATH_OPERATIONS()
-BIT_OPERATIONS()
-TX_OPERATIONS<safemath_error_label>()
-EXTERNAL_OPERATIONS<safemath_error_label>()
-CONTEXT_OPERATIONS<safemath_error_label>()
-MEMORY_OPERATIONS<safemath_error_label>()
-STORAGE_OPERATIONS()
-BLOCK_OPERATIONS()
-VM_OPERATIONS<execute_jump_label>()
-PUSH_OPERATIONS()
-DUP_OPERATIONS()
-SWAP_OPERATIONS()
-LOG_OPERATIONS<safemath_error_label>()
+  MATH_OPERATIONS()
+  BIT_OPERATIONS<safemath_error_label>()
+  TX_OPERATIONS<safemath_error_label>()
+  EXTERNAL_OPERATIONS<safemath_error_label>()
+  CONTEXT_OPERATIONS<safemath_error_label>()
+  MEMORY_OPERATIONS<safemath_error_label>()
+  STORAGE_OPERATIONS()
+  BLOCK_OPERATIONS()
+  VM_OPERATIONS<execute_jump_label>()
+  PUSH_OPERATIONS()
+  DUP_OPERATIONS()
+  SWAP_OPERATIONS()
+  LOG_OPERATIONS<safemath_error_label>()
 }

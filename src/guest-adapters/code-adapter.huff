@@ -1,16 +1,16 @@
-#define macro GUEST_CODESIZE {
+#define macro GUEST_CODESIZE = takes(0) returns(0) {
   GET_CODESIZE()
 }
 
 template <safemath_error_label>
-#define macro GUEST_CODECOPY {
+#define macro GUEST_CODECOPY = takes(0) returns(0) {
   CALC_MEM_OFFSET<safemath_error_label>()
   GET_GUEST_ADDRESS()
   extcodecopy
 }
 
 template <safemath_error_label>
-#define macro GUEST_EXTCODECOPY {
+#define macro GUEST_EXTCODECOPY = takes(0) returns(0) {
   swap1
   CALC_MEM_OFFSET<safemath_error_label>()
   swap1

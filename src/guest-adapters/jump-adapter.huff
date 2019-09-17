@@ -1,23 +1,40 @@
 template <execute_jump_label>
-#define macro GUEST_JUMP {
+#define macro GUEST_JUMP = takes(0) returns(0) {
   dup1
-  EXTCODE_LOC()
-  add
+  CALC_CODE_OFFSET()
   mload
   0xf8
   shr
   0x5b
   eq
-  execute_jump_label
+  <execute_jump_label>
   jumpi
   0x0
   jump
 }
 
-template <op_jump_label>
-#define macro GUEST_JUMPI {
+template <execute_jump_label>
+#define macro GUEST_JUMPI = takes(0) returns(0) {
+  // [destination, condition]
   swap1
-  op_jump_label
+  dup2
+  CALC_CODE_OFFSET()    // [destination+code_offset, condition, destination]
+  mload                 // [codechunk, condition, destination]
+  0xf8
+  shr                   // [codebyte, condition, destination]
+  0x5b
+  eq                    // [valid_jumpddest, condition, destination]
+  and                   // [valid_jumpdest & condition, destination]
+  swap1
+  <execute_jump_label>  // [jumpdest, condition, destination]
   jumpi
   pop
 }
+
+/* template <op_jump_label>
+#define macro GUEST_JUMPI = takes(0) returns(0) {
+  swap1
+  <op_jump_label>
+  jumpi
+  pop
+} */

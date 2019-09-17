@@ -28,7 +28,7 @@ template <intLocation>
   */
 template <intLocation>
 #define macro PLUS_PLUS_INT = takes(0) returns(1) {
-  <intLocation> dup1 mload  // [int, int_loc]
-  0x01 add dup1             // [int+1, int+1, int_loc]
-  mstore
+  <intLocation> dup1 mload  // [ int, int_loc ]
+  0x01 add dup1             // [ int+1, int+1, int_loc ]
+  swap2 mstore              // [ int+1 ]
 }

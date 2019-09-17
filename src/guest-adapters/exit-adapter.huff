@@ -1,13 +1,15 @@
-#define macro GUEST_REVERT {
-  OFFSET_MEM()
+template <safemath_error_label>
+#define macro GUEST_REVERT = takes(0) returns(0) {
+  CALC_MEM_OFFSET<safemath_error_label>()
   revert
 }
 
-#define macro GUEST_RETURN {
-  OFFSET_MEM()
+template <safemath_error_label>
+#define macro GUEST_RETURN = takes(0) returns(0) {
+  CALC_MEM_OFFSET<safemath_error_label>()
   return
 }
 
-#define macro GUEST_STOP {
+#define macro GUEST_STOP = takes(0) returns(0) {
   stop
 }

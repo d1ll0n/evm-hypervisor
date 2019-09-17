@@ -14,6 +14,10 @@
   "license": "ISC",
   "dependencies": {
     "@aztec/huff": "^0.0.1",
-    "emasm": "^0.1.7"
+    "emasm": "^0.1.7",
+    "kool-makerpccall": "^0.1.1",
+    "solc": "^0.5.11",
+    "web3": "^1.2.1",
+    "web3-eth-abi": "^1.2.1"
   }
 }

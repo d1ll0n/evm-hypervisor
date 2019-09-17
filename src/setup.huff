@@ -1,16 +1,16 @@
-#define macro COPY_JUMPTABLE {
+#define macro COPY_JUMPTABLE = takes(0) returns(0) {
   __tablesize(OPCODE__TABLE)
   __tablestart(OPCODE__TABLE)
   0x0
   codecopy
 }
 
-#define macro INIT_PROGRAMCOUNTER {
-  GET_CODE_PTR() mload
+#define macro INIT_PROGRAMCOUNTER = takes(0) returns(0) {
+  CODE_PTR()
   SET_PC()
 }
 
-#define macro COPY_GUEST_CODE {
+#define macro COPY_GUEST_CODE = takes(0) returns(0) {
   CODE_PTR()                 // [ codeloc ]
   0x0
   calldataload
@@ -31,7 +31,7 @@
   SET_MEM_OFFSET()  // []
 }
 
-#define macro PREPARE_HYPERVISOR {
+#define macro PREPARE_HYPERVISOR = takes(0) returns(0) {
   COPY_JUMPTABLE() // []
   INIT_PROGRAMCOUNTER()
   COPY_GUEST_CODE()

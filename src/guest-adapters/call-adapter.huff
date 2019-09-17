@@ -7,7 +7,7 @@ template <safemath_error_label>
   swap5
   CALC_MEM_OFFSET<safemath_error_label>()
   swap5
-  INCREMENT_AND_RUN()
+  call
 }
 
 template <safemath_error_label>
@@ -18,7 +18,7 @@ template <safemath_error_label>
   swap5
   CALC_MEM_OFFSET<safemath_error_label>()
   swap5
-  INCREMENT_AND_RUN()
+  callcode
 }
 
 template <safemath_error_label>
@@ -29,7 +29,7 @@ template <safemath_error_label>
   swap4
   CALC_MEM_OFFSET<safemath_error_label>()
   swap4
-  INCREMENT_AND_RUN()
+  staticcall
 }
 
 template <safemath_error_label>
@@ -40,7 +40,7 @@ template <safemath_error_label>
   swap4
   CALC_MEM_OFFSET<safemath_error_label>()
   swap4
-  INCREMENT_AND_RUN()
+  delegatecall
 }
 
 template <safemath_error_label>
@@ -49,7 +49,6 @@ template <safemath_error_label>
   CALC_MEM_OFFSET<safemath_error_label>()
   swap1
   create
-  INCREMENT_AND_RUN()
 }
 
 template <safemath_error_label>
@@ -58,6 +57,5 @@ template <safemath_error_label>
   CALC_MEM_OFFSET<safemath_error_label>()
   swap2
   create2
-  INCREMENT_AND_RUN()
 }
 

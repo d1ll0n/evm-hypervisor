@@ -1,0 +1,45 @@
+#include "./memio/io.huff"
+#include "./utils/integers.huff"
+
+/* FUNCTIONS */
+template <amount>
+#define macro PC_INCREMENT_AND_PUSH = takes(0) returns(1) {
+  GET_PC()
+  <amount>
+  add
+  dup1
+  SET_PC()
+}
+
+/**
+  * @dev read a word from bytecode
+  */
+#define macro READ_BYTECODE_WORD = takes(0) returns(0) {
+  mload
+}
+
+#define macro READ_OPCODE = takes(0) returns(0) {
+  mload
+  0xf8
+  shr
+}
+
+#define macro RUN_NEXT_INSTRUCTION = takes(0) returns(0) {
+  READ_OPCODE()
+  0x20
+  mul
+  mload
+  jump
+}
+
+#define macro EXECUTE_JUMP = takes(0) returns(0) {
+  CALC_CODE_OFFSET()
+  dup1
+  SET_PC()
+  RUN_NEXT_INSTRUCTION()
+}
+
+#define macro INCREMENT_AND_RUN = takes(0) returns(0) {
+  PLUS_PLUS_INT<PC_PTR>()
+  RUN_NEXT_INSTRUCTION()
+}

@@ -1,0 +1,3 @@
+#define macro TEST_PUSH = takes(0) returns(0) {
+  
+}

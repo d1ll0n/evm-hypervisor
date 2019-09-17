@@ -1,4 +1,4 @@
-#define macro GUEST_PC {
+#define macro GUEST_PC = takes(0) returns(0) {
   GET_PC()
   // set pc [pc_loc, pc]
   GET_CODE_PTR()
@@ -10,11 +10,11 @@
   SET_PC()
 }
 
-#define macro GUEST_ADDRESS {
+#define macro GUEST_ADDRESS = takes(0) returns(0) {
   GET_GUEST_ADDRESS()
 }
 
-#define macro GUEST_MSIZE {
+#define macro GUEST_MSIZE = takes(0) returns(0) {
   GET_MEM_OFFSET()
   msize
   sub

@@ -1,29 +1,31 @@
+#include "./memio/io.huff"
+
 template <safemath_error_label>
-#define macro GUEST_LOG0 {
+#define macro GUEST_LOG0 = takes(0) returns(0) {
   CALC_MEM_OFFSET<safemath_error_label>()
   log0
 }
 
 template <safemath_error_label>
-#define macro GUEST_LOG1 {
+#define macro GUEST_LOG1 = takes(0) returns(0) {
   CALC_MEM_OFFSET<safemath_error_label>()
   log1
 }
 
 template <safemath_error_label>
-#define macro GUEST_LOG2 {
+#define macro GUEST_LOG2 = takes(0) returns(0) {
   CALC_MEM_OFFSET<safemath_error_label>()
   log2
 }
 
 template <safemath_error_label>
-#define macro GUEST_LOG3 {
+#define macro GUEST_LOG3 = takes(0) returns(0) {
   CALC_MEM_OFFSET<safemath_error_label>()
   log3
 }
 
 template <safemath_error_label>
-#define macro GUEST_LOG4 {
+#define macro GUEST_LOG4 = takes(0) returns(0) {
   CALC_MEM_OFFSET<safemath_error_label>()
   log4
 }
