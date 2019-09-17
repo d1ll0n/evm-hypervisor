@@ -23,7 +23,6 @@ const compile = ({kv = true, rt = true, basic = true} = {}) => {
 	const KeyValueTest = { bytecode, deployedBytecode, abi } = kv && easySolc.compile('KeyValueTest', kvSource, false);
   const VmRunTest = { bytecode, deployedBytecode, abi } = rt && easySolc.compile('VmRunTest', runSource, false);
   // console.log(VmRunTest.abi)
-  fs.writeFileSync('./build/kv.json', KeyValueTest.deployedBytecode)
   return {
     // AbiTest,
     Basic,

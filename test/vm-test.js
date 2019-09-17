@@ -29,7 +29,7 @@ const setup = async () => {
   basic = await deploy(address, Basic)
 }
 
-/* async function testBasic() {
+async function testBasic() {
   await setup()
   const inputData = encodeParameters(['uint256', 'uint256'], [100, 100])
   let calldata = encodeParameters(['address', 'bytes'], [basic._address, inputData])
@@ -41,7 +41,7 @@ const setup = async () => {
     gasPrice: 1
   })
   console.log(receipt)
-} */
+}
 
 async function testDeploy() {
   await setup()
@@ -79,4 +79,4 @@ async function testDeploy() {
   // const vmRunTest = new web3.eth.Contract()
 }
 
-testDeploy()
+testBasic()
