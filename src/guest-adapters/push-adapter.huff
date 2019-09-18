@@ -9,7 +9,7 @@ template <mask, bytesize, look_behind_size>
     pc still refers to the location of the push instruction, so look behind size will be 31-size
   */ 
   <look_behind_size>            // [look_behind_size]
-  GET_PC()        // [pc, look_behind_size]
+  GET_PC()       // [pc, look_behind_size]
   /* Increment the program counter for the next opcode */
   dup1 <bytesize> add SET_PC()      // [pc, look_behind_size]
   sub                               // [pc - look_behind_size]
@@ -21,8 +21,12 @@ template <mask, bytesize, look_behind_size>
 
 #define macro READ_PUSH32 = takes(0) returns(1) {
   /* pc still refers to the location of the push instruction, increment it by 1 */
-  GET_PC() 0x01 add         // [ pc + 1]
+  GET_PC()                  // [pc]
   /* Increment the program counter for the next opcode */
-  dup1 0x20 add SET_PC()    // [ pc + 1 ]
-  READ_BYTECODE_WORD()      // [mem[2081+pc]]
+  dup1                      // [pc, pc]
+  0x20                      // [0x20, pc, pc]
+  add                       // [0x20+pc, pc]
+  SET_PC()                  // [pc]
+  0x01 add                  // [pc+1]
+  READ_BYTECODE_WORD()      // [mem[pc+1]]
 }

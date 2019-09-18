@@ -1,6 +1,6 @@
 #define macro DO_MATH_RETURN = takes(0) returns(0) {
-
-  0xff 0x00 mstore
+  getpc 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff getpc 0x0 0x0 log3
+  /* 0xff 0x00 mstore
   0xff 0x00 log0
   0x00 mload
   0xf add
@@ -10,5 +10,5 @@
   0x20 calldataload
   add
   0x00 mstore
-  0x20 0x00 log0
+  0x20 0x00 log0 */
 }

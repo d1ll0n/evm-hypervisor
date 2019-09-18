@@ -1,13 +1,13 @@
 #define macro GUEST_PC = takes(0) returns(0) {
-  GET_PC()
-  // set pc [pc_loc, pc]
-  GET_CODE_PTR()
-  dup2
-  sub
-  swap1
-  0x1
-  add
-  SET_PC()
+  GET_PC()    // [pc]
+  CODE_PTR()  // [0x2080, pc]
+  dup2        // [pc, 0x2080, pc]
+  sub         // [pc - 0x2080, pc]
+  swap1       // [pc, pc-0x2080]
+  0x1         // [1, pc, pc-0x2080]
+  add         // [pc+1, pc-0x2080]
+  dup1        // [pc+1, pc+1, pc-0x2080]
+  SET_PC()    // [pc+1, pc-0x2080]
 }
 
 #define macro GUEST_ADDRESS = takes(0) returns(0) {

@@ -16,8 +16,8 @@ template <execute_jump_label>
 template <execute_jump_label>
 #define macro GUEST_JUMPI = takes(0) returns(0) {
   // [destination, condition]
-  swap1
-  dup2
+  swap1                 // [condition, destination]
+  dup2                  // [destination, condition, destination]
   CALC_CODE_OFFSET()    // [destination+code_offset, condition, destination]
   mload                 // [codechunk, condition, destination]
   0xf8
@@ -25,8 +25,7 @@ template <execute_jump_label>
   0x5b
   eq                    // [valid_jumpddest, condition, destination]
   and                   // [valid_jumpdest & condition, destination]
-  swap1
-  <execute_jump_label>  // [jumpdest, condition, destination]
+  <execute_jump_label>  // [jumpdest, valid_jumpdest & condition, destination]
   jumpi
   pop
 }
